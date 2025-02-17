@@ -9,10 +9,10 @@ import json
 
 console = Console()
 client = OpenAI(api_key="")
-
+config_file = (path.expanduser(environ.get("XDG_CONFIG_HOME", "~/.config") +
+               "/dallecli/config.json"))
 
 def configure_openai():
-    config_file = path.expanduser("~/.openai/config.json")
     if not path.exists(config_file):
         makedirs(path.dirname(config_file), exist_ok=True)
         api_key = input("🔑 Enter your OpenAI API key: ")
@@ -208,7 +208,6 @@ def edit(image_path, brightness, contrast, sharpness):
 )
 def update_key(env):
     """🔐 Update the OpenAI API key."""
-    config_file = path.expanduser("~/.openai/config.json")
     if not path.exists(config_file):
         makedirs(path.dirname(config_file), exist_ok=True)
     api_key = ""
