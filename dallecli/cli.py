@@ -12,6 +12,7 @@ client = OpenAI(api_key="")
 config_file = (path.expanduser(environ.get("XDG_CONFIG_HOME", "~/.config") +
                "/dallecli/config.json"))
 
+
 def configure_openai():
     if not path.exists(config_file):
         makedirs(path.dirname(config_file), exist_ok=True)
@@ -46,8 +47,9 @@ def generate_image(
                 if not hide:
                     image.show()
                 if save_path is not None:
-                    if not path.exists(path.dirname(save_path)):
-                        makedirs(path.dirname(save_path))
+                    parentdir = path.dirname(save_path)
+                    if parentdir != '' and not path.exists(parentdir):
+                        makedirs(parentdir)
                     image.save(save_path)
     except AuthenticationError:
         print("🔒 Authentication Failed. Try with a fresh API key.")
@@ -159,7 +161,7 @@ def cli():
     "--save-path",
     type=click.Path(dir_okay=False, writable=True),
     help="💾 Save the generated image to the specified file path",
-    default="images/output.png",
+    default="output.png",
 )
 @click.option("--hide", is_flag=True, help="🖱️ Do not open the image after generation")
 @click.option("--quality", default="standard", help="👌 The quality of the image")
